@@ -293,15 +293,15 @@
 
         <!-- Navigation -->
         <div class="nav">
-            <button class="active" onclick="showSection('overview')">Overview</button>
-            <button onclick="showSection('calendar')">90-Day Calendar</button>
-            <button onclick="showSection('push-a')">Push A</button>
-            <button onclick="showSection('push-b')">Push B</button>
-            <button onclick="showSection('pull-a')">Pull A</button>
-            <button onclick="showSection('pull-b')">Pull B</button>
-            <button onclick="showSection('legs-a')">Legs A</button>
-            <button onclick="showSection('legs-b')">Legs B</button>
-            <button onclick="showSection('progress')">Progress Log</button>
+            <button class="active" onclick="showSection('overview', this)">Overview</button>
+            <button onclick="showSection('calendar', this)">90-Day Calendar</button>
+            <button onclick="showSection('push-a', this)">Push A</button>
+            <button onclick="showSection('push-b', this)">Push B</button>
+            <button onclick="showSection('pull-a', this)">Pull A</button>
+            <button onclick="showSection('pull-b', this)">Pull B</button>
+            <button onclick="showSection('legs-a', this)">Legs A</button>
+            <button onclick="showSection('legs-b', this)">Legs B</button>
+            <button onclick="showSection('progress', this)">Progress Log</button>
         </div>
 
         <!-- OVERVIEW SECTION -->
@@ -1238,11 +1238,11 @@
 
     <script>
         // Section Navigation
-        function showSection(id) {
+        function showSection(id, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
+            if (btn) btn.classList.add('active');
         }
 
         // ============ WORKOUT DATA ============
@@ -1543,7 +1543,7 @@
                 const weekEnd = new Date(weekStart);
                 weekEnd.setDate(weekStart.getDate() + 6);
 
-                calHTML += `<div class="week-label" style="cursor:pointer;" onclick="showSection('progress'); setTimeout(()=>selectWeek(${week+1}),100);">
+                calHTML += `<div class="week-label" style="cursor:pointer;" onclick="showSection('progress', document.querySelector('.nav button:last-child')); setTimeout(()=>selectWeek(${week+1}),100);">
                     Week ${week + 1} ${isWeekA ? '(A)' : '(B)'} — ${weekStart.toLocaleDateString('en-GB', {month:'short', day:'numeric'})} to ${weekEnd.toLocaleDateString('en-GB', {month:'short', day:'numeric'})} →
                 </div>`;
                 calHTML += '<div class="calendar-grid">';

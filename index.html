@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="90-Day Program">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0a0a' width='100' height='100' rx='20'/><text y='70' x='15' font-size='60'>🏋️</text></svg>">
+    <title>90-Day Mass Building Program</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 16px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+        .header h1 { font-size: 2.5em; color: #fff; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.1em; color: #8892b0; }
+        .header .stats {
+            display: flex; justify-content: center; gap: 40px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .header .stat { text-align: center; }
+        .header .stat-number { font-size: 2em; font-weight: 700; color: #64ffda; }
+        .header .stat-label { font-size: 0.85em; color: #8892b0; }
+
+        /* Navigation */
+        .nav {
+            display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;
+            position: sticky; top: 0; background: #0a0a0a; padding: 15px 0; z-index: 100;
+            border-bottom: 1px solid #222;
+        }
+        .nav button {
+            padding: 10px 20px; border: 1px solid #333; background: #1a1a1a;
+            color: #ccc; border-radius: 8px; cursor: pointer; font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .nav button:hover, .nav button.active {
+            background: #64ffda; color: #0a0a0a; border-color: #64ffda; font-weight: 600;
+        }
+
+        /* Sections */
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Split Overview */
+        .split-overview {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; margin-bottom: 40px;
+        }
+        .split-card {
+            background: #1a1a1a; border-radius: 12px; padding: 20px;
+            border: 1px solid #333; text-align: center;
+        }
+        .split-card.gym { border-color: #64ffda; }
+        .split-card.activity { border-color: #ffd93d; }
+        .split-card .day { font-size: 0.8em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .split-card .workout { font-size: 1.1em; font-weight: 600; margin-top: 5px; color: #fff; }
+        .split-card .icon { font-size: 2em; margin-bottom: 10px; }
+
+        /* Workout Cards */
+        .workout-section {
+            background: #1a1a1a; border-radius: 16px; padding: 30px;
+            margin-bottom: 30px; border: 1px solid #333;
+        }
+        .workout-section h2 {
+            font-size: 1.5em; margin-bottom: 5px; color: #fff;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .workout-section .meta {
+            color: #888; font-size: 0.9em; margin-bottom: 20px;
+            display: flex; gap: 20px; flex-wrap: wrap;
+        }
+        .workout-section .meta span { display: flex; align-items: center; gap: 5px; }
+        
+        .muscle-group-header {
+            font-size: 0.85em; text-transform: uppercase; letter-spacing: 2px;
+            color: #64ffda; margin: 25px 0 10px; padding-bottom: 5px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        /* Exercise Table */
+        .exercise-table { width: 100%; border-collapse: collapse; }
+        .exercise-table th {
+            text-align: left; padding: 10px 12px; color: #888;
+            font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .exercise-table td {
+            padding: 12px; border-bottom: 1px solid #1f1f1f; vertical-align: middle;
+        }
+        .exercise-table tr:hover td { background: #222; }
+        .exercise-name { font-weight: 500; color: #fff; }
+        .exercise-note { font-size: 0.8em; color: #888; margin-top: 3px; }
+        .exercise-img {
+            width: 40px; height: 40px; border-radius: 8px;
+            background: #2a2a2a; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2em;
+        }
+        .sets-reps {
+            background: #2a2a2a; padding: 4px 10px; border-radius: 6px;
+            font-size: 0.85em; display: inline-block; font-weight: 500;
+        }
+        .rest-badge {
+            background: #1a2a1a; color: #64ffda; padding: 3px 8px;
+            border-radius: 4px; font-size: 0.8em; font-weight: 500;
+        }
+
+        /* Calendar */
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;
+            margin-bottom: 20px;
+        }
+        .cal-header {
+            text-align: center; padding: 10px; font-size: 0.75em;
+            color: #888; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .cal-day {
+            aspect-ratio: 1; border-radius: 8px; padding: 6px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 0.75em; text-align: center; border: 1px solid #222;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .cal-day:hover { transform: scale(1.05); }
+        .cal-day .day-num { font-weight: 700; font-size: 1.1em; }
+        .cal-day .day-label { font-size: 0.7em; margin-top: 2px; }
+        .cal-day.legs { background: #1a2a1a; border-color: #2d5a2d; color: #7ddf7d; }
+        .cal-day.push { background: #2a1a1a; border-color: #5a2d2d; color: #df7d7d; }
+        .cal-day.pull { background: #1a1a2a; border-color: #2d2d5a; color: #7d7ddf; }
+        .cal-day.activity { background: #2a2a1a; border-color: #5a5a2d; color: #dfdf7d; }
+        .cal-day.rest { background: #1a1a1a; border-color: #2a2a2a; color: #666; }
+        .cal-day.empty { border: none; background: none; }
+
+        .week-label {
+            font-size: 0.8em; color: #64ffda; margin: 20px 0 10px;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* Progress Section */
+        .progress-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+        }
+        .progress-card {
+            background: #1a1a1a; border-radius: 12px; padding: 20px; border: 1px solid #333;
+        }
+        .progress-card h3 { margin-bottom: 15px; color: #64ffda; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .progress-item {
+            display: flex; justify-content: space-between; padding: 8px 0;
+            border-bottom: 1px solid #222; font-size: 0.9em;
+        }
+        .progress-item:last-child { border-bottom: none; }
+
+        /* Tips */
+        .tip-box {
+            background: #1a2a2a; border-left: 3px solid #64ffda;
+            padding: 15px 20px; border-radius: 0 8px 8px 0; margin: 15px 0;
+            font-size: 0.9em;
+        }
+        .tip-box strong { color: #64ffda; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .header .stats { gap: 20px; }
+            .workout-section { padding: 20px; }
+            .exercise-table { font-size: 0.85em; }
+            .nav { gap: 5px; }
+            .nav button { padding: 8px 12px; font-size: 0.8em; }
+            .calendar-grid { gap: 3px; }
+            .cal-day { padding: 4px; font-size: 0.65em; }
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: #fff; color: #000; }
+            .nav { display: none; }
+            .section { display: block !important; page-break-inside: avoid; }
+            .workout-section { border: 1px solid #ccc; }
+            .exercise-table td, .exercise-table th { border-bottom: 1px solid #eee; }
+        }
+
+        /* Week Selector */
+        .week-selector { margin-top: 20px; }
+        .week-buttons {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+        }
+        .week-btn {
+            padding: 12px 8px; border: 1px solid #333; background: #1a1a1a;
+            color: #ccc; border-radius: 10px; cursor: pointer; text-align: center;
+            transition: all 0.2s; font-size: 0.85em;
+        }
+        .week-btn:hover { border-color: #64ffda; color: #64ffda; }
+        .week-btn.active { background: #64ffda; color: #0a0a0a; border-color: #64ffda; font-weight: 700; }
+        .week-btn.has-data { border-color: #4a9; }
+        .week-btn.has-data::after { content: ' ✓'; color: #4a9; }
+        .week-btn.active.has-data::after { color: #0a0a0a; }
+        .week-btn .week-phase {
+            font-size: 0.7em; display: block; margin-top: 2px; opacity: 0.7;
+        }
+
+        /* Workout Log */
+        .workout-log {
+            background: #1a1a1a; border-radius: 12px; padding: 20px;
+            margin-bottom: 15px; border: 1px solid #333;
+        }
+        .workout-log h4 {
+            color: #fff; margin-bottom: 12px; display: flex;
+            align-items: center; gap: 8px; font-size: 1em;
+        }
+        .workout-log .day-badge {
+            font-size: 0.7em; padding: 3px 8px; border-radius: 4px;
+            text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+        }
+        .day-badge.legs-badge { background: #1a2a1a; color: #7ddf7d; }
+        .day-badge.push-badge { background: #2a1a1a; color: #df7d7d; }
+        .day-badge.pull-badge { background: #1a1a2a; color: #7d7ddf; }
+
+        .log-exercise {
+            display: grid; grid-template-columns: 1fr auto auto;
+            gap: 8px; padding: 8px 0; border-bottom: 1px solid #222;
+            align-items: center;
+        }
+        .log-exercise:last-child { border-bottom: none; }
+        .log-exercise-name { font-size: 0.85em; color: #ddd; }
+        .log-input {
+            width: 60px; padding: 6px 8px; background: #2a2a2a;
+            border: 1px solid #444; border-radius: 6px; color: #fff;
+            font-size: 0.85em; text-align: center;
+        }
+        .log-input:focus { border-color: #64ffda; outline: none; }
+        .log-input::placeholder { color: #666; font-size: 0.8em; }
+        .log-input.filled { border-color: #4a9; background: #1a2a1a; }
+
+        .measure-input {
+            width: 70px; padding: 6px 8px; background: #2a2a2a;
+            border: 1px solid #444; border-radius: 6px; color: #fff;
+            font-size: 0.85em; text-align: center;
+        }
+        .measure-input:focus { border-color: #64ffda; outline: none; }
+        .measure-input.filled { border-color: #4a9; background: #1a2a1a; }
+
+        .completion-bar {
+            height: 4px; background: #2a2a2a; border-radius: 2px;
+            margin-top: 10px; overflow: hidden;
+        }
+        .completion-bar-fill {
+            height: 100%; background: #64ffda; border-radius: 2px;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>90-Day Mass Building Program</h1>
+            <p class="subtitle">Push / Pull / Legs — Calisthenics + Hypertrophy Hybrid</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">90</div>
+                    <div class="stat-label">Days</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">13</div>
+                    <div class="stat-label">Weeks</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Gym Days/Week</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Workout Variants</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <button class="active" onclick="showSection('overview')">Overview</button>
+            <button onclick="showSection('calendar')">90-Day Calendar</button>
+            <button onclick="showSection('push-a')">Push A</button>
+            <button onclick="showSection('push-b')">Push B</button>
+            <button onclick="showSection('pull-a')">Pull A</button>
+            <button onclick="showSection('pull-b')">Pull B</button>
+            <button onclick="showSection('legs-a')">Legs A</button>
+            <button onclick="showSection('legs-b')">Legs B</button>
+            <button onclick="showSection('progress')">Progress Log</button>
+        </div>
+
+        <!-- OVERVIEW SECTION -->
+        <div class="section active" id="overview">
+            <h2 style="color:#fff; margin-bottom: 20px;">Weekly Split</h2>
+            <div class="split-overview">
+                <div class="split-card gym">
+                    <div class="icon">🦵</div>
+                    <div class="day">Monday</div>
+                    <div class="workout">Legs A / B</div>
+                </div>
+                <div class="split-card gym">
+                    <div class="icon">💪</div>
+                    <div class="day">Tuesday</div>
+                    <div class="workout">Push A / B</div>
+                </div>
+                <div class="split-card activity">
+                    <div class="icon">🧘</div>
+                    <div class="day">Wednesday</div>
+                    <div class="workout">Activity Day</div>
+                </div>
+                <div class="split-card gym">
+                    <div class="icon">🏋️</div>
+                    <div class="day">Thursday</div>
+                    <div class="workout">Pull A / B</div>
+                </div>
+                <div class="split-card activity">
+                    <div class="icon">🎾</div>
+                    <div class="day">Friday</div>
+                    <div class="workout">Activity Day</div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Rule:</strong> A/B variants alternate every week. If any gym day is missed, shift all remaining days forward by 1. Weekend = full rest.
+            </div>
+
+            <div class="tip-box">
+                <strong>Activity Day Options:</strong> Hot Yoga, Running, Tennis, Football, Calisthenics park session, Swimming, or Rest if needed.
+            </div>
+
+            <h3 style="color:#fff; margin: 30px 0 15px;">Weekly Volume Summary</h3>
+            <div class="progress-grid">
+                <div class="progress-card">
+                    <h3>Chest & Shoulders</h3>
+                    <div class="progress-item"><span>Chest</span><span>12 sets/week</span></div>
+                    <div class="progress-item"><span>Lateral Delts</span><span>3 sets/week</span></div>
+                    <div class="progress-item"><span>Rear Delts</span><span>3 sets/week</span></div>
+                    <div class="progress-item"><span>Triceps</span><span>8 sets/week (+ pressing)</span></div>
+                </div>
+                <div class="progress-card">
+                    <h3>Back & Arms</h3>
+                    <div class="progress-item"><span>Lats</span><span>11-13 sets/week</span></div>
+                    <div class="progress-item"><span>Traps</span><span>9 sets/week</span></div>
+                    <div class="progress-item"><span>Biceps</span><span>8 sets/week (+ pulling)</span></div>
+                    <div class="progress-item"><span>Forearms</span><span>2 sets/week (+ gripping)</span></div>
+                </div>
+                <div class="progress-card">
+                    <h3>Legs</h3>
+                    <div class="progress-item"><span>Quads</span><span>7-14 sets/week</span></div>
+                    <div class="progress-item"><span>Hamstrings</span><span>6-8 sets/week</span></div>
+                    <div class="progress-item"><span>Glutes</span><span>3-9 sets/week</span></div>
+                    <div class="progress-item"><span>Calves</span><span>4 sets/week</span></div>
+                </div>
+                <div class="progress-card">
+                    <h3>Core (on Push + Pull days)</h3>
+                    <div class="progress-item"><span>Mountain Climbers</span><span>6 sets/week</span></div>
+                    <div class="progress-item"><span>Leg Raises</span><span>6 sets/week</span></div>
+                    <div class="progress-item"><span>Cable/Crunches</span><span>6 sets/week</span></div>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <strong>For Tall/Skinny Guys (191cm):</strong> Use elevated heels or squat shoes for squats. Prioritize machines (leg press, hack squat) to bypass spinal fatigue. Eat 300-400 extra calories on leg days. Tempo: 3s eccentric on quad isolation work.
+            </div>
+        </div>
+
+        <!-- CALENDAR SECTION -->
+        <div class="section" id="calendar">
+            <h2 style="color:#fff; margin-bottom: 20px;">90-Day Program Calendar</h2>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <span style="display:flex; align-items:center; gap:5px; font-size:0.8em;"><span style="width:12px;height:12px;background:#1a2a1a;border:1px solid #2d5a2d;border-radius:3px;display:inline-block;"></span> Legs</span>
+                <span style="display:flex; align-items:center; gap:5px; font-size:0.8em;"><span style="width:12px;height:12px;background:#2a1a1a;border:1px solid #5a2d2d;border-radius:3px;display:inline-block;"></span> Push</span>
+                <span style="display:flex; align-items:center; gap:5px; font-size:0.8em;"><span style="width:12px;height:12px;background:#1a1a2a;border:1px solid #2d2d5a;border-radius:3px;display:inline-block;"></span> Pull</span>
+                <span style="display:flex; align-items:center; gap:5px; font-size:0.8em;"><span style="width:12px;height:12px;background:#2a2a1a;border:1px solid #5a5a2d;border-radius:3px;display:inline-block;"></span> Activity</span>
+                <span style="display:flex; align-items:center; gap:5px; font-size:0.8em;"><span style="width:12px;height:12px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:3px;display:inline-block;"></span> Rest</span>
+            </div>
+            <div id="calendar-container"></div>
+        </div>
+
+        <!-- PUSH A SECTION -->
+        <div class="section" id="push-a">
+            <div class="workout-section">
+                <h2>🔴 Push Day A — Chest + Shoulders + Triceps</h2>
+                <div class="meta">
+                    <span>⏱️ ~80-85 min</span>
+                    <span>📊 28 working sets + 9 abs</span>
+                    <span>🎯 Heavy compounds + calisthenics primer</span>
+                </div>
+
+                <div class="muscle-group-header">Chest</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🤸</div></td>
+                            <td><div class="exercise-name">Pike Push-Ups (elevated feet)</div><div class="exercise-note">Feet on bench, hands on floor, pike position</div></td>
+                            <td><span class="sets-reps">3 × 8-12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Calisthenics primer — activates delts + upper chest</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">⬇️</div></td>
+                            <td><div class="exercise-name">Weighted Dips</div><div class="exercise-note">Lean forward slightly for chest bias</div></td>
+                            <td><span class="sets-reps">3 × 6-10</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Primary mass builder — add weight progressively</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">📐</div></td>
+                            <td><div class="exercise-name">Incline Press (Heavy)</div><div class="exercise-note">30-45° angle, barbell or dumbbells</div></td>
+                            <td><span class="sets-reps">3 × 6-10</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Upper chest focus — go heavy</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦋</div></td>
+                            <td><div class="exercise-name">Cable Flies — High to Low</div><div class="exercise-note">Pulleys at top, arc down to hip level</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Full stretch at top, squeeze at bottom</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Shoulders</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🏋️</div></td>
+                            <td><div class="exercise-name">Dumbbell Lateral Raises</div><div class="exercise-note">Last set = drop set to failure</div></td>
+                            <td><span class="sets-reps">3 × 12 + drop</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Control the negative, no swinging</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔗</div></td>
+                            <td><div class="exercise-name">Rear Delt Cable Fly (Unilateral)</div><div class="exercise-note">Cable at chest height, cross body pull</div></td>
+                            <td><span class="sets-reps">2 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Pinky up, lead with elbow</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🎯</div></td>
+                            <td><div class="exercise-name">Rear Delt Machine</div><div class="exercise-note">Reverse pec deck</div></td>
+                            <td><span class="sets-reps">1 × 15</span></td>
+                            <td><span class="rest-badge">—</span></td>
+                            <td>Burnout finisher, squeeze hard</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Triceps</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🪑</div></td>
+                            <td><div class="exercise-name">Close-Grip Bench Press</div><div class="exercise-note">Hands shoulder-width apart on barbell</div></td>
+                            <td><span class="sets-reps">3 × 10-12</span></td>
+                            <td><span class="rest-badge">75s</span></td>
+                            <td>Heavy compound tricep movement</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">📎</div></td>
+                            <td><div class="exercise-name">Tricep Cable Pushdowns</div><div class="exercise-note">Rope or straight bar attachment</div></td>
+                            <td><span class="sets-reps">3 × 10-12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Lock out and squeeze at bottom</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🤲</div></td>
+                            <td><div class="exercise-name">Close-Grip Push-Ups</div><div class="exercise-note">Hands close together, elbows tight to body</div></td>
+                            <td><span class="sets-reps">2 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Bodyweight finisher — chest to floor</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Abs</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔥</div></td>
+                            <td><div class="exercise-name">Mountain Climbers</div></td>
+                            <td><span class="sets-reps">3 × 40</span></td>
+                            <td><span class="rest-badge">30s</span></td>
+                            <td>Fast, controlled, keep hips low</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦿</div></td>
+                            <td><div class="exercise-name">Straight Leg Raises</div><div class="exercise-note">Hanging or on bench</div></td>
+                            <td><span class="sets-reps">3 × 12-15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>No swinging — slow and controlled</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🧎</div></td>
+                            <td><div class="exercise-name">Ab Cable Pulldown (Kneeling)</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Crunch toward knees, not just pulling with arms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PUSH B SECTION -->
+        <div class="section" id="push-b">
+            <div class="workout-section">
+                <h2>🟠 Push Day B — Calisthenics Emphasis</h2>
+                <div class="meta">
+                    <span>⏱️ ~80-85 min</span>
+                    <span>📊 28 working sets + 9 abs</span>
+                    <span>🎯 Bodyweight focus + isolation variations</span>
+                </div>
+
+                <div class="muscle-group-header">Chest</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🤸</div></td>
+                            <td><div class="exercise-name">Handstand Hold or Hindu Push-Ups</div><div class="exercise-note">Against wall / flowing push-up pattern</div></td>
+                            <td><span class="sets-reps">3 × 45s / 3×10</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Isometric shoulder strength or dynamic flow</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">💥</div></td>
+                            <td><div class="exercise-name">Push-Up Handles (Explosive)</div><div class="exercise-note">Deep range of motion, explosive press</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Full depth, fast up, controlled down</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">📐</div></td>
+                            <td><div class="exercise-name">Incline Dumbbell Press (Heavy)</div><div class="exercise-note">30-45° incline bench</div></td>
+                            <td><span class="sets-reps">3 × 6-10</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Squeeze at top, full stretch at bottom</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦋</div></td>
+                            <td><div class="exercise-name">Cable Flies — Low to High</div><div class="exercise-note">Pulleys at bottom, arc up to shoulder level</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Upper chest / clavicular fibers</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Shoulders</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔗</div></td>
+                            <td><div class="exercise-name">Cable Lateral Raises (Unilateral)</div><div class="exercise-note">Constant tension throughout ROM</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Stand sideways to cable, cross body</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔗</div></td>
+                            <td><div class="exercise-name">Rear Delt Cable Fly (Unilateral)</div></td>
+                            <td><span class="sets-reps">2 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Same as Day A</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🎯</div></td>
+                            <td><div class="exercise-name">Rear Delt Machine</div></td>
+                            <td><span class="sets-reps">1 × 15</span></td>
+                            <td><span class="rest-badge">—</span></td>
+                            <td>Squeeze and hold</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Triceps</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🏋️</div></td>
+                            <td><div class="exercise-name">Overhead Tricep Extension (Cable)</div><div class="exercise-note">Rope attachment, face away from machine</div></td>
+                            <td><span class="sets-reps">3 × 10-12</span></td>
+                            <td><span class="rest-badge">75s</span></td>
+                            <td>Long head emphasis — full stretch behind head</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">💀</div></td>
+                            <td><div class="exercise-name">Skull Crushers</div><div class="exercise-note">EZ-bar or dumbbells, flat bench</div></td>
+                            <td><span class="sets-reps">3 × 10-12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Lower to forehead, elbows stationary</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">💎</div></td>
+                            <td><div class="exercise-name">Diamond Push-Ups</div><div class="exercise-note">Hands together forming diamond shape</div></td>
+                            <td><span class="sets-reps">2 × failure</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Bodyweight burnout to finish</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Abs</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔥</div></td>
+                            <td><div class="exercise-name">Mountain Climbers</div></td>
+                            <td><span class="sets-reps">3 × 40</span></td>
+                            <td><span class="rest-badge">30s</span></td>
+                            <td>Fast, controlled</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦿</div></td>
+                            <td><div class="exercise-name">Bent Knee Leg Raises</div></td>
+                            <td><span class="sets-reps">3 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Curl pelvis up at top</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔄</div></td>
+                            <td><div class="exercise-name">Full Extension Crunches</div><div class="exercise-note">Arms overhead, lying flat, full crunch up</div></td>
+                            <td><span class="sets-reps">3 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Full ROM — arms to toes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PULL A SECTION -->
+        <div class="section" id="pull-a">
+            <div class="workout-section">
+                <h2>🔵 Pull Day A — Vertical Focus</h2>
+                <div class="meta">
+                    <span>⏱️ ~82 min</span>
+                    <span>📊 32 working sets + 9 abs</span>
+                    <span>🎯 Lat width + calisthenics pulling</span>
+                </div>
+
+                <div class="muscle-group-header">Back (Lats)</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🤸</div></td>
+                            <td><div class="exercise-name">Pull-Ups (Bodyweight)</div><div class="exercise-note">Wide overhand grip</div></td>
+                            <td><span class="sets-reps">3 × 8</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Full dead hang → chin over bar</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">⬆️</div></td>
+                            <td><div class="exercise-name">Weighted Chin-Ups</div><div class="exercise-note">Supinated grip, add weight (10-20kg)</div></td>
+                            <td><span class="sets-reps">3 × 6-8</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Mass builder — bicep + lower lat focus</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔽</div></td>
+                            <td><div class="exercise-name">Close-Grip Handle Pulldown</div><div class="exercise-note">V-bar or close neutral grip attachment</div></td>
+                            <td><span class="sets-reps">3 × 10-12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Lean back slightly, drive elbows down</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">☝️</div></td>
+                            <td><div class="exercise-name">Unilateral Cable Pulldown</div><div class="exercise-note">Single arm, D-handle</div></td>
+                            <td><span class="sets-reps">2 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Full stretch at top, squeeze at hip</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Traps</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔗</div></td>
+                            <td><div class="exercise-name">Face Pulls (Low to High)</div><div class="exercise-note">Cable at low position, pull to face height</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>External rotate at top, squeeze shoulder blades</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🙆</div></td>
+                            <td><div class="exercise-name">Lower Trap Plate Raise (Y-Raise)</div><div class="exercise-note">Prone on incline bench, arms in Y</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Light weight, feel the squeeze between shoulder blades</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦾</div></td>
+                            <td><div class="exercise-name">Dumbbell Shrugs</div><div class="exercise-note">Heavy dumbbells, straight up and down</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Hold at top 1s, no rolling</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Biceps</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔨</div></td>
+                            <td><div class="exercise-name">Hammer Curls (21s method)</div><div class="exercise-note">7 bottom half + 7 top half + 7 full reps</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Brachialis + forearm emphasis</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🤖</div></td>
+                            <td><div class="exercise-name">Machine Bicep Curls</div><div class="exercise-note">Alternate wide grip / close grip each set</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Full ROM, controlled negative</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">💪</div></td>
+                            <td><div class="exercise-name">Bar Curls + Reverse Curls</div><div class="exercise-note">12 regular + 12 reverse grip (forearm finisher)</div></td>
+                            <td><span class="sets-reps">2 × 12+12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Light bar — pump and squeeze</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Abs</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔥</div></td>
+                            <td><div class="exercise-name">Mountain Climbers</div></td>
+                            <td><span class="sets-reps">3 × 40</span></td>
+                            <td><span class="rest-badge">30s</span></td>
+                            <td>Fast, controlled</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦿</div></td>
+                            <td><div class="exercise-name">Straight Leg Raises</div></td>
+                            <td><span class="sets-reps">3 × 12-15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Curl pelvis at top</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🧎</div></td>
+                            <td><div class="exercise-name">Ab Cable Pulldown</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Crunch toward knees</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PULL B SECTION -->
+        <div class="section" id="pull-b">
+            <div class="workout-section">
+                <h2>🟣 Pull Day B — Horizontal Focus</h2>
+                <div class="meta">
+                    <span>⏱️ ~83 min</span>
+                    <span>📊 33 working sets + 9 abs</span>
+                    <span>🎯 Back thickness + rowing power</span>
+                </div>
+
+                <div class="muscle-group-header">Back (Thickness)</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🤸</div></td>
+                            <td><div class="exercise-name">Inverted Smith Machine Row</div><div class="exercise-note">Feet on floor, body under bar, row up</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Calisthenics horizontal pull — chest to bar</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🏋️</div></td>
+                            <td><div class="exercise-name">Barbell/Smith Row</div><div class="exercise-note">Alternate pronated/supinated grip each week</div></td>
+                            <td><span class="sets-reps">4 × 10</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Main thickness builder — pull to navel</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦍</div></td>
+                            <td><div class="exercise-name">Gorilla Rows</div><div class="exercise-note">Two KBs/DBs on floor, alternating rows</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Anti-rotation bonus, unilateral pulling</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔗</div></td>
+                            <td><div class="exercise-name">Close-Grip Seated Row</div><div class="exercise-note">V-bar handle, machine or cable</div></td>
+                            <td><span class="sets-reps">3 × 10</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Full stretch forward, squeeze back</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Traps</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔗</div></td>
+                            <td><div class="exercise-name">Face Pulls (Horizontal)</div><div class="exercise-note">Cable at face height, pull to ears</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Different angle from Day A</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦾</div></td>
+                            <td><div class="exercise-name">Trap Bar / Dumbbell Shrugs</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Heavy, hold at top</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🙆</div></td>
+                            <td><div class="exercise-name">Prone Y+T Raises (Incline Bench)</div><div class="exercise-note">10 Y-raises + 10 T-raises per set</div></td>
+                            <td><span class="sets-reps">3 × 10+10</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Light weight — lower/mid trap endurance</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Biceps</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">📐</div></td>
+                            <td><div class="exercise-name">Incline Dumbbell Curls</div><div class="exercise-note">45° incline bench, arms hanging</div></td>
+                            <td><span class="sets-reps">3 × 10-12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Long head stretch — different from Day A</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🏋️</div></td>
+                            <td><div class="exercise-name">EZ-Bar Curls</div><div class="exercise-note">Shoulder-width grip on EZ bar</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Strict form — no body swing</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔄</div></td>
+                            <td><div class="exercise-name">Reverse Curls (Forearm Finisher)</div><div class="exercise-note">Overhand grip, EZ-bar or straight bar</div></td>
+                            <td><span class="sets-reps">2 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Forearm + brachioradialis burn</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Abs</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔥</div></td>
+                            <td><div class="exercise-name">Mountain Climbers</div></td>
+                            <td><span class="sets-reps">3 × 40</span></td>
+                            <td><span class="rest-badge">30s</span></td>
+                            <td>Fast, controlled</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦿</div></td>
+                            <td><div class="exercise-name">Bent Knee Leg Raises</div></td>
+                            <td><span class="sets-reps">3 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Curl pelvis up at top</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔄</div></td>
+                            <td><div class="exercise-name">Full Extension Crunches</div></td>
+                            <td><span class="sets-reps">3 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Arms overhead to toes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LEGS A SECTION -->
+        <div class="section" id="legs-a">
+            <div class="workout-section">
+                <h2>🟢 Legs Day A — Quad Dominant</h2>
+                <div class="meta">
+                    <span>⏱️ ~76 min</span>
+                    <span>📊 27 working sets</span>
+                    <span>🎯 Squat pattern + quad isolation</span>
+                    <span>🚫 No abs today</span>
+                </div>
+
+                <div class="tip-box">
+                    <strong>Tall guy tip:</strong> Elevate heels with plates or squat shoes. Use 3-1-1 tempo on leg press (3s down, 1s pause, 1s up). Eat 300-400 extra calories today.
+                </div>
+
+                <div class="muscle-group-header">Quads</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🏋️</div></td>
+                            <td><div class="exercise-name">Barbell Back Squat</div><div class="exercise-note">ATG if mobility allows, heels elevated</div></td>
+                            <td><span class="sets-reps">4 × 8-10</span></td>
+                            <td><span class="rest-badge">120s</span></td>
+                            <td>King of leg mass — progressive overload</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🦵</div></td>
+                            <td><div class="exercise-name">Leg Press (Feet Low + Narrow)</div><div class="exercise-note">Feet low on platform, shoulder-width</div></td>
+                            <td><span class="sets-reps">4 × 12</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Quad bias — 3s eccentric, don't lock out</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🇧🇬</div></td>
+                            <td><div class="exercise-name">Bulgarian Split Squats</div><div class="exercise-note">Rear foot elevated on bench, dumbbells in hands</div></td>
+                            <td><span class="sets-reps">3 × 10/leg</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Deep stretch at bottom — unilateral balance</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔄</div></td>
+                            <td><div class="exercise-name">Leg Extension + Drop Set</div><div class="exercise-note">Last set: drop weight 30%, continue to failure</div></td>
+                            <td><span class="sets-reps">3 × 12 + drop</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Squeeze at top 1s, slow negative</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Hamstrings</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🏋️</div></td>
+                            <td><div class="exercise-name">Romanian Deadlift (RDL)</div><div class="exercise-note">Barbell, slight knee bend, hinge at hips</div></td>
+                            <td><span class="sets-reps">3 × 10</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Feel the hamstring stretch — don't ego lift</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔄</div></td>
+                            <td><div class="exercise-name">Lying Leg Curl</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Squeeze at top, slow eccentric</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Glutes</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🍑</div></td>
+                            <td><div class="exercise-name">Hip Thrust (Barbell/Smith)</div><div class="exercise-note">Back on bench, drive through heels</div></td>
+                            <td><span class="sets-reps">3 × 12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Pause 1s at top — full glute lockout</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Calves</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🦶</div></td>
+                            <td><div class="exercise-name">Seated Calf Raise</div><div class="exercise-note">Barbell on knees or machine — soleus focus</div></td>
+                            <td><span class="sets-reps">4 × 15</span></td>
+                            <td><span class="rest-badge">30s</span></td>
+                            <td>2s stretch at bottom, 1s hold at top. Knees bent = soleus.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LEGS B SECTION -->
+        <div class="section" id="legs-b">
+            <div class="workout-section">
+                <h2>🟡 Legs Day B — Posterior Chain Dominant</h2>
+                <div class="meta">
+                    <span>⏱️ ~78 min</span>
+                    <span>📊 28 working sets</span>
+                    <span>🎯 Deadlift pattern + glute/hamstring focus</span>
+                    <span>🚫 No abs today</span>
+                </div>
+
+                <div class="tip-box">
+                    <strong>Tip:</strong> Long stride on lunges = more glute activation. Short stride = more quad. Go LONG today.
+                </div>
+
+                <div class="muscle-group-header">Hamstrings + Glutes</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🏋️</div></td>
+                            <td><div class="exercise-name">Conventional Deadlift / Trap Bar DL</div><div class="exercise-note">Full posterior chain compound</div></td>
+                            <td><span class="sets-reps">4 × 6-8</span></td>
+                            <td><span class="rest-badge">120s</span></td>
+                            <td>Main strength lift — brace hard, hinge</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔄</div></td>
+                            <td><div class="exercise-name">Lying Leg Curl</div></td>
+                            <td><span class="sets-reps">4 × 10-12</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Pre-exhaust hamstrings</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🚶</div></td>
+                            <td><div class="exercise-name">Walking Lunges (Dumbbell)</div><div class="exercise-note">Long stride, lean slightly forward</div></td>
+                            <td><span class="sets-reps">3 × 12/leg</span></td>
+                            <td><span class="rest-badge">60s</span></td>
+                            <td>Glute/ham emphasis with long stride</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Quads</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🦵</div></td>
+                            <td><div class="exercise-name">Hack Squat</div><div class="exercise-note">Back supported, feet shoulder-width</div></td>
+                            <td><span class="sets-reps">4 × 10-12</span></td>
+                            <td><span class="rest-badge">90s</span></td>
+                            <td>Push hard without spine load</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🔄</div></td>
+                            <td><div class="exercise-name">Leg Extension (Slow Eccentric)</div><div class="exercise-note">3-second negative on every rep</div></td>
+                            <td><span class="sets-reps">3 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Higher reps, time under tension focus</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Glutes</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🔗</div></td>
+                            <td><div class="exercise-name">Cable Pull-Throughs / KB Swings</div><div class="exercise-note">Hip hinge, squeeze glutes at top</div></td>
+                            <td><span class="sets-reps">3 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Hip extension focus — not a squat</td>
+                        </tr>
+                        <tr>
+                            <td><div class="exercise-img">🏀</div></td>
+                            <td><div class="exercise-name">Wall Balls</div><div class="exercise-note">Medicine ball, squat + throw to wall target</div></td>
+                            <td><span class="sets-reps">3 × 15</span></td>
+                            <td><span class="rest-badge">45s</span></td>
+                            <td>Explosive, functional — glute/quad combo</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="muscle-group-header">Calves</div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr><th style="width:40px">#</th><th>Exercise</th><th>Sets × Reps</th><th>Rest</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exercise-img">🦶</div></td>
+                            <td><div class="exercise-name">Donkey Calf Raise</div><div class="exercise-note">Bent over, weight on hips, full stretch</div></td>
+                            <td><span class="sets-reps">4 × 15</span></td>
+                            <td><span class="rest-badge">30s</span></td>
+                            <td>Deep stretch at bottom, hold top 1s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PROGRESS SECTION -->
+        <div class="section" id="progress">
+            <h2 style="color:#fff; margin-bottom: 20px;">Progress Tracking</h2>
+            
+            <div class="tip-box">
+                <strong>Progressive Overload Rules:</strong><br>
+                • Once you hit the top of the rep range for all sets → add 2.5kg (upper) or 5kg (lower)<br>
+                • Track your weights weekly — even small jumps compound over 90 days<br>
+                • If you miss the bottom of the rep range on 2+ sets → keep the weight, focus form<br>
+                • Data saves automatically to your device (localStorage)
+            </div>
+
+            <!-- Week Selector -->
+            <div class="week-selector">
+                <h3 style="color:#fff; margin-bottom: 15px;">Select Week</h3>
+                <div class="week-buttons" id="week-buttons"></div>
+            </div>
+
+            <!-- Week Detail View -->
+            <div id="week-detail" style="display:none; margin-top: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+                    <h3 id="week-detail-title" style="color:#64ffda; margin:0;"></h3>
+                    <div>
+                        <button onclick="prevWeek()" style="padding:8px 14px; background:#2a2a2a; border:1px solid #444; color:#ccc; border-radius:6px; cursor:pointer; margin-right:5px;">← Prev</button>
+                        <button onclick="nextWeek()" style="padding:8px 14px; background:#2a2a2a; border:1px solid #444; color:#ccc; border-radius:6px; cursor:pointer;">Next →</button>
+                    </div>
+                </div>
+                <div id="week-workouts"></div>
+            </div>
+
+            <!-- Phase Overview -->
+            <h3 style="color:#fff; margin: 40px 0 15px;">Phase Progression</h3>
+            <div class="progress-grid">
+                <div class="progress-card" style="border-color: #64ffda;">
+                    <h3>Weeks 1-4: Foundation</h3>
+                    <div class="progress-item"><span>Focus</span><span>Form & consistency</span></div>
+                    <div class="progress-item"><span>Intensity</span><span>RPE 7-8</span></div>
+                    <div class="progress-item"><span>Use 70-min versions</span><span></span></div>
+                    <div class="progress-item"><span>Skip finishers if gassed</span><span></span></div>
+                </div>
+                <div class="progress-card" style="border-color: #ffd93d;">
+                    <h3>Weeks 5-8: Building</h3>
+                    <div class="progress-item"><span>Focus</span><span>Progressive overload</span></div>
+                    <div class="progress-item"><span>Intensity</span><span>RPE 8-9</span></div>
+                    <div class="progress-item"><span>Add all finishers</span><span></span></div>
+                    <div class="progress-item"><span>Push full 80-85 min</span><span></span></div>
+                </div>
+                <div class="progress-card" style="border-color: #ff6b6b;">
+                    <h3>Weeks 9-13: Peak</h3>
+                    <div class="progress-item"><span>Focus</span><span>Max intensity + PRs</span></div>
+                    <div class="progress-item"><span>Intensity</span><span>RPE 9-10</span></div>
+                    <div class="progress-item"><span>Drop sets on isolations</span><span></span></div>
+                    <div class="progress-item"><span>Test new 1RM on compounds</span><span></span></div>
+                </div>
+            </div>
+
+            <!-- Body Measurements -->
+            <h3 style="color:#fff; margin: 40px 0 15px;">Body Measurements</h3>
+            <div class="progress-card" style="max-width:400px;">
+                <h3>Update Monthly</h3>
+                <div class="progress-item"><span>Weight</span><span><input type="text" class="measure-input" data-key="body_weight" placeholder="kg"></span></div>
+                <div class="progress-item"><span>Chest</span><span><input type="text" class="measure-input" data-key="body_chest" placeholder="cm"></span></div>
+                <div class="progress-item"><span>Arms (flexed)</span><span><input type="text" class="measure-input" data-key="body_arms" placeholder="cm"></span></div>
+                <div class="progress-item"><span>Thighs</span><span><input type="text" class="measure-input" data-key="body_thighs" placeholder="cm"></span></div>
+                <div class="progress-item"><span>Calves</span><span><input type="text" class="measure-input" data-key="body_calves" placeholder="cm"></span></div>
+                <div class="progress-item"><span>Waist</span><span><input type="text" class="measure-input" data-key="body_waist" placeholder="cm"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Section Navigation
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ============ WORKOUT DATA ============
+        const workouts = {
+            pushA: {
+                name: 'Push A — Chest + Shoulders + Triceps',
+                badge: 'push-badge',
+                exercises: [
+                    { name: 'Pike Push-Ups', sets: '3×8-12', hasWeight: false },
+                    { name: 'Weighted Dips', sets: '3×6-10', hasWeight: true },
+                    { name: 'Incline Press', sets: '3×6-10', hasWeight: true },
+                    { name: 'Cable Flies (High→Low)', sets: '3×12', hasWeight: true },
+                    { name: 'DB Lateral Raises', sets: '3×12', hasWeight: true },
+                    { name: 'Rear Delt Cable Fly', sets: '2×15', hasWeight: true },
+                    { name: 'Rear Delt Machine', sets: '1×15', hasWeight: true },
+                    { name: 'Close-Grip Bench', sets: '3×10-12', hasWeight: true },
+                    { name: 'Tricep Cable Pushdowns', sets: '3×10-12', hasWeight: true },
+                    { name: 'Close-Grip Push-Ups', sets: '2×12', hasWeight: false },
+                ]
+            },
+            pushB: {
+                name: 'Push B — Calisthenics Emphasis',
+                badge: 'push-badge',
+                exercises: [
+                    { name: 'Handstand Hold / Hindu PU', sets: '3×45s/10', hasWeight: false },
+                    { name: 'Push-Up Handles (Explosive)', sets: '3×12', hasWeight: false },
+                    { name: 'Incline DB Press', sets: '3×6-10', hasWeight: true },
+                    { name: 'Cable Flies (Low→High)', sets: '3×12', hasWeight: true },
+                    { name: 'Cable Lateral Raises', sets: '3×12', hasWeight: true },
+                    { name: 'Rear Delt Cable Fly', sets: '2×15', hasWeight: true },
+                    { name: 'Rear Delt Machine', sets: '1×15', hasWeight: true },
+                    { name: 'Overhead Tricep Extension', sets: '3×10-12', hasWeight: true },
+                    { name: 'Skull Crushers', sets: '3×10-12', hasWeight: true },
+                    { name: 'Diamond Push-Ups', sets: '2×fail', hasWeight: false },
+                ]
+            },
+            pullA: {
+                name: 'Pull A — Vertical Focus',
+                badge: 'pull-badge',
+                exercises: [
+                    { name: 'Pull-Ups', sets: '3×8', hasWeight: false },
+                    { name: 'Weighted Chin-Ups', sets: '3×6-8', hasWeight: true },
+                    { name: 'Close-Grip Pulldown', sets: '3×10-12', hasWeight: true },
+                    { name: 'Unilateral Cable Pulldown', sets: '2×12', hasWeight: true },
+                    { name: 'Face Pulls (Low→High)', sets: '3×12', hasWeight: true },
+                    { name: 'Y-Raise (Lower Trap)', sets: '3×12', hasWeight: true },
+                    { name: 'Dumbbell Shrugs', sets: '3×12', hasWeight: true },
+                    { name: 'Hammer Curls (21s)', sets: '3×12', hasWeight: true },
+                    { name: 'Machine Bicep Curls', sets: '3×12', hasWeight: true },
+                    { name: 'Bar Curls + Reverse', sets: '2×12+12', hasWeight: true },
+                ]
+            },
+            pullB: {
+                name: 'Pull B — Horizontal Focus',
+                badge: 'pull-badge',
+                exercises: [
+                    { name: 'Inverted Smith Row', sets: '3×12', hasWeight: false },
+                    { name: 'Barbell/Smith Row', sets: '4×10', hasWeight: true },
+                    { name: 'Gorilla Rows', sets: '3×12', hasWeight: true },
+                    { name: 'Close-Grip Seated Row', sets: '3×10', hasWeight: true },
+                    { name: 'Face Pulls (Horizontal)', sets: '3×12', hasWeight: true },
+                    { name: 'DB/Trap Bar Shrugs', sets: '3×12', hasWeight: true },
+                    { name: 'Y+T Raises (Incline)', sets: '3×10+10', hasWeight: true },
+                    { name: 'Incline DB Curls', sets: '3×10-12', hasWeight: true },
+                    { name: 'EZ-Bar Curls', sets: '3×12', hasWeight: true },
+                    { name: 'Reverse Curls', sets: '2×15', hasWeight: true },
+                ]
+            },
+            legsA: {
+                name: 'Legs A — Quad Dominant',
+                badge: 'legs-badge',
+                exercises: [
+                    { name: 'Back Squat', sets: '4×8-10', hasWeight: true },
+                    { name: 'Leg Press (Low+Narrow)', sets: '4×12', hasWeight: true },
+                    { name: 'Bulgarian Split Squats', sets: '3×10/leg', hasWeight: true },
+                    { name: 'Leg Extension + Drop', sets: '3×12', hasWeight: true },
+                    { name: 'Romanian Deadlift', sets: '3×10', hasWeight: true },
+                    { name: 'Lying Leg Curl', sets: '3×12', hasWeight: true },
+                    { name: 'Hip Thrust', sets: '3×12', hasWeight: true },
+                    { name: 'Seated Calf Raise', sets: '4×15', hasWeight: true },
+                ]
+            },
+            legsB: {
+                name: 'Legs B — Posterior Chain',
+                badge: 'legs-badge',
+                exercises: [
+                    { name: 'Deadlift / Trap Bar DL', sets: '4×6-8', hasWeight: true },
+                    { name: 'Lying Leg Curl', sets: '4×10-12', hasWeight: true },
+                    { name: 'Walking Lunges', sets: '3×12/leg', hasWeight: true },
+                    { name: 'Hack Squat', sets: '4×10-12', hasWeight: true },
+                    { name: 'Leg Extension (Slow)', sets: '3×15', hasWeight: true },
+                    { name: 'Cable Pull-Throughs / KB Swings', sets: '3×15', hasWeight: true },
+                    { name: 'Wall Balls', sets: '3×15', hasWeight: true },
+                    { name: 'Donkey Calf Raise', sets: '4×15', hasWeight: true },
+                ]
+            }
+        };
+
+        // Week schedule: which workouts happen each week
+        function getWeekWorkouts(weekNum) {
+            const isA = weekNum % 2 === 1; // odd weeks = A
+            return {
+                legs: isA ? 'legsA' : 'legsB',
+                push: isA ? 'pushA' : 'pushB',
+                pull: isA ? 'pullA' : 'pullB'
+            };
+        }
+
+        function getPhase(weekNum) {
+            if (weekNum <= 4) return 'Foundation';
+            if (weekNum <= 8) return 'Building';
+            return 'Peak';
+        }
+
+        // ============ LOCAL STORAGE ============
+        function saveData(key, value) {
+            try {
+                const data = JSON.parse(localStorage.getItem('workout90') || '{}');
+                data[key] = value;
+                localStorage.setItem('workout90', JSON.stringify(data));
+            } catch(e) {}
+        }
+
+        function loadData(key) {
+            try {
+                const data = JSON.parse(localStorage.getItem('workout90') || '{}');
+                return data[key] || '';
+            } catch(e) { return ''; }
+        }
+
+        function hasWeekData(weekNum) {
+            try {
+                const data = JSON.parse(localStorage.getItem('workout90') || '{}');
+                return Object.keys(data).some(k => k.startsWith(`w${weekNum}_`));
+            } catch(e) { return false; }
+        }
+
+        // ============ WEEK BUTTONS ============
+        let currentWeek = 1;
+
+        function generateWeekButtons() {
+            const container = document.getElementById('week-buttons');
+            let html = '';
+            for (let w = 1; w <= 13; w++) {
+                const phase = getPhase(w);
+                const hasData = hasWeekData(w);
+                const variant = w % 2 === 1 ? 'A' : 'B';
+                html += `<button class="week-btn ${hasData ? 'has-data' : ''}" onclick="selectWeek(${w})" id="week-btn-${w}">
+                    Week ${w} (${variant})
+                    <span class="week-phase">${phase}</span>
+                </button>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function selectWeek(weekNum) {
+            currentWeek = weekNum;
+            document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`week-btn-${weekNum}`).classList.add('active');
+            document.getElementById('week-detail').style.display = 'block';
+            renderWeekDetail(weekNum);
+        }
+
+        function prevWeek() {
+            if (currentWeek > 1) selectWeek(currentWeek - 1);
+        }
+        function nextWeek() {
+            if (currentWeek < 13) selectWeek(currentWeek + 1);
+        }
+
+        // ============ RENDER WEEK DETAIL ============
+        function renderWeekDetail(weekNum) {
+            const variant = weekNum % 2 === 1 ? 'A' : 'B';
+            const phase = getPhase(weekNum);
+            document.getElementById('week-detail-title').textContent = 
+                `Week ${weekNum} (${variant}) — ${phase} Phase`;
+
+            const schedule = getWeekWorkouts(weekNum);
+            const container = document.getElementById('week-workouts');
+            
+            let html = '';
+            const days = [
+                { key: 'legs', label: 'Monday', dayKey: schedule.legs },
+                { key: 'push', label: 'Tuesday', dayKey: schedule.push },
+                { key: 'pull', label: 'Thursday', dayKey: schedule.pull }
+            ];
+
+            days.forEach(day => {
+                const workout = workouts[day.dayKey];
+                html += `<div class="workout-log">
+                    <h4>
+                        <span class="day-badge ${workout.badge}">${day.label}</span>
+                        ${workout.name}
+                    </h4>`;
+                
+                workout.exercises.forEach((ex, i) => {
+                    const weightKey = `w${weekNum}_${day.dayKey}_${i}_kg`;
+                    const repsKey = `w${weekNum}_${day.dayKey}_${i}_reps`;
+                    const savedWeight = loadData(weightKey);
+                    const savedReps = loadData(repsKey);
+
+                    html += `<div class="log-exercise">
+                        <div class="log-exercise-name">${ex.name} <span style="color:#666; font-size:0.8em;">(${ex.sets})</span></div>`;
+                    
+                    if (ex.hasWeight) {
+                        html += `<input type="text" inputmode="decimal" class="log-input ${savedWeight ? 'filled' : ''}" 
+                            placeholder="kg" value="${savedWeight}" 
+                            onchange="saveData('${weightKey}', this.value); this.classList.toggle('filled', !!this.value); updateCompletion(${weekNum});">`;
+                    } else {
+                        html += `<span style="width:60px;"></span>`;
+                    }
+                    
+                    html += `<input type="text" inputmode="numeric" class="log-input ${savedReps ? 'filled' : ''}" 
+                        placeholder="reps" value="${savedReps}" 
+                        onchange="saveData('${repsKey}', this.value); this.classList.toggle('filled', !!this.value); updateCompletion(${weekNum});">
+                    </div>`;
+                });
+
+                // Completion bar
+                html += `<div class="completion-bar"><div class="completion-bar-fill" id="bar-${day.dayKey}-${weekNum}"></div></div>`;
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+            updateCompletion(weekNum);
+        }
+
+        function updateCompletion(weekNum) {
+            const schedule = getWeekWorkouts(weekNum);
+            const dayKeys = [schedule.legs, schedule.push, schedule.pull];
+            
+            dayKeys.forEach(dayKey => {
+                const workout = workouts[dayKey];
+                let filled = 0;
+                let total = 0;
+                workout.exercises.forEach((ex, i) => {
+                    const repsKey = `w${weekNum}_${dayKey}_${i}_reps`;
+                    if (loadData(repsKey)) filled++;
+                    total++;
+                });
+                const pct = total > 0 ? (filled / total) * 100 : 0;
+                const bar = document.getElementById(`bar-${dayKey}-${weekNum}`);
+                if (bar) bar.style.width = pct + '%';
+            });
+
+            // Update week button indicator
+            const btn = document.getElementById(`week-btn-${weekNum}`);
+            if (btn) {
+                if (hasWeekData(weekNum)) {
+                    btn.classList.add('has-data');
+                } else {
+                    btn.classList.remove('has-data');
+                }
+            }
+        }
+
+        // ============ BODY MEASUREMENTS ============
+        function initMeasurements() {
+            document.querySelectorAll('.measure-input').forEach(input => {
+                const key = input.dataset.key;
+                const saved = loadData(key);
+                if (saved) { input.value = saved; input.classList.add('filled'); }
+                input.addEventListener('change', function() {
+                    saveData(key, this.value);
+                    this.classList.toggle('filled', !!this.value);
+                });
+            });
+        }
+
+        // ============ CALENDAR ============
+        function generateCalendar() {
+            const container = document.getElementById('calendar-container');
+            const startDate = new Date(2026, 4, 14);
+            const dayOfWeek = startDate.getDay();
+            const daysUntilMonday = dayOfWeek === 0 ? 1 : (dayOfWeek === 1 ? 0 : 8 - dayOfWeek);
+            const mondayStart = new Date(startDate);
+            mondayStart.setDate(startDate.getDate() + daysUntilMonday);
+
+            const schedule = {
+                1: { type: 'legs', labelA: 'Legs A', labelB: 'Legs B' },
+                2: { type: 'push', labelA: 'Push A', labelB: 'Push B' },
+                3: { type: 'activity', label: 'Activity' },
+                4: { type: 'pull', labelA: 'Pull A', labelB: 'Pull B' },
+                5: { type: 'activity', label: 'Activity' },
+                6: { type: 'rest', label: 'Rest' },
+                0: { type: 'rest', label: 'Rest' }
+            };
+
+            const headerDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            let calHTML = '<div class="calendar-grid">';
+            headerDays.forEach(d => { calHTML += `<div class="cal-header">${d}</div>`; });
+            calHTML += '</div>';
+
+            for (let week = 0; week < 13; week++) {
+                const isWeekA = week % 2 === 0;
+                const weekStart = new Date(mondayStart);
+                weekStart.setDate(mondayStart.getDate() + week * 7);
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+
+                calHTML += `<div class="week-label" style="cursor:pointer;" onclick="showSection('progress'); setTimeout(()=>selectWeek(${week+1}),100);">
+                    Week ${week + 1} ${isWeekA ? '(A)' : '(B)'} — ${weekStart.toLocaleDateString('en-GB', {month:'short', day:'numeric'})} to ${weekEnd.toLocaleDateString('en-GB', {month:'short', day:'numeric'})} →
+                </div>`;
+                calHTML += '<div class="calendar-grid">';
+
+                for (let day = 0; day < 7; day++) {
+                    const currentDate = new Date(weekStart);
+                    currentDate.setDate(weekStart.getDate() + day);
+                    const dayNum = currentDate.getDate();
+                    const dow = currentDate.getDay() === 0 ? 0 : currentDate.getDay();
+                    const info = schedule[dow];
+                    let label = info.labelA ? (isWeekA ? info.labelA : info.labelB) : info.label;
+                    let type = info.type;
+
+                    calHTML += `<div class="cal-day ${type}">
+                        <div class="day-num">${dayNum}</div>
+                        <div class="day-label">${label}</div>
+                    </div>`;
+                }
+                calHTML += '</div>';
+            }
+
+            container.innerHTML = calHTML;
+        }
+
+        // ============ INIT ============
+        generateCalendar();
+        generateWeekButtons();
+        initMeasurements();
+    </script>
+</body>
+</html>

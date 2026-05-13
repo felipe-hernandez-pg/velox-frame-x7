@@ -263,6 +263,72 @@
             height: 100%; background: #64ffda; border-radius: 2px;
             transition: width 0.3s;
         }
+
+        /* Weekly Planner */
+        .planner-day {
+            background: #1a1a1a; border-radius: 12px; margin-bottom: 12px;
+            border: 1px solid #333; overflow: hidden;
+        }
+        .planner-day-header {
+            padding: 16px 20px; display: flex; flex-wrap: wrap;
+            align-items: center; gap: 8px 16px;
+        }
+        .planner-day-label {
+            font-weight: 700; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .planner-day-date {
+            font-size: 0.8em; color: #888; margin-left: 8px;
+        }
+        .planner-day-workout {
+            font-size: 0.95em; color: #fff; font-weight: 500;
+        }
+        .planner-day-meta {
+            font-size: 0.8em; color: #888;
+        }
+        .planner-expand-icon {
+            margin-left: auto; color: #64ffda; font-size: 0.8em;
+            transition: transform 0.3s;
+        }
+        .planner-day.expanded .planner-expand-icon {
+            transform: rotate(180deg);
+        }
+        .planner-day-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+            padding: 0 20px;
+        }
+        .planner-day.expanded .planner-day-body {
+            max-height: 2000px; padding: 0 20px 20px;
+        }
+        .planner-exercise {
+            display: grid; grid-template-columns: 36px 1fr auto auto;
+            gap: 10px; padding: 10px 0; border-bottom: 1px solid #222;
+            align-items: center;
+        }
+        .planner-exercise:last-child { border-bottom: none; }
+        .planner-exercise-icon {
+            width: 36px; height: 36px; border-radius: 8px;
+            background: #2a2a2a; display: flex; align-items: center; justify-content: center;
+            font-size: 1.1em;
+        }
+        .planner-exercise-info { min-width: 0; }
+        .planner-exercise-name { font-size: 0.88em; color: #fff; font-weight: 500; }
+        .planner-exercise-note { font-size: 0.75em; color: #888; margin-top: 2px; }
+        .planner-exercise-sets {
+            background: #2a2a2a; padding: 4px 10px; border-radius: 6px;
+            font-size: 0.8em; font-weight: 500; white-space: nowrap; color: #ddd;
+        }
+        .planner-exercise-rest {
+            background: #1a2a1a; color: #64ffda; padding: 3px 8px;
+            border-radius: 4px; font-size: 0.75em; font-weight: 500; white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .planner-exercise { grid-template-columns: 30px 1fr auto auto; gap: 6px; }
+            .planner-exercise-name { font-size: 0.82em; }
+            .planner-exercise-sets { font-size: 0.75em; padding: 3px 7px; }
+            .planner-exercise-rest { font-size: 0.7em; padding: 2px 6px; }
+            .planner-day-header { padding: 12px 14px; }
+        }
     </style>
 </head>
 <body>
@@ -1168,14 +1234,10 @@
 
         <!-- PROGRESS SECTION -->
         <div class="section" id="progress">
-            <h2 style="color:#fff; margin-bottom: 20px;">Progress Tracking</h2>
+            <h2 style="color:#fff; margin-bottom: 20px;">Weekly Planner</h2>
             
             <div class="tip-box">
-                <strong>Progressive Overload Rules:</strong><br>
-                • Once you hit the top of the rep range for all sets → add 2.5kg (upper) or 5kg (lower)<br>
-                • Track your weights weekly — even small jumps compound over 90 days<br>
-                • If you miss the bottom of the rep range on 2+ sets → keep the weight, focus form<br>
-                • Data saves automatically to your device (localStorage)
+                <strong>How it works:</strong> Tap any week to see your full 5-day schedule with all exercises, sets, reps, and rest times. Odd weeks = Variant A, Even weeks = Variant B.
             </div>
 
             <!-- Week Selector -->
@@ -1221,18 +1283,6 @@
                     <div class="progress-item"><span>Test new 1RM on compounds</span><span></span></div>
                 </div>
             </div>
-
-            <!-- Body Measurements -->
-            <h3 style="color:#fff; margin: 40px 0 15px;">Body Measurements</h3>
-            <div class="progress-card" style="max-width:400px;">
-                <h3>Update Monthly</h3>
-                <div class="progress-item"><span>Weight</span><span><input type="text" class="measure-input" data-key="body_weight" placeholder="kg"></span></div>
-                <div class="progress-item"><span>Chest</span><span><input type="text" class="measure-input" data-key="body_chest" placeholder="cm"></span></div>
-                <div class="progress-item"><span>Arms (flexed)</span><span><input type="text" class="measure-input" data-key="body_arms" placeholder="cm"></span></div>
-                <div class="progress-item"><span>Thighs</span><span><input type="text" class="measure-input" data-key="body_thighs" placeholder="cm"></span></div>
-                <div class="progress-item"><span>Calves</span><span><input type="text" class="measure-input" data-key="body_calves" placeholder="cm"></span></div>
-                <div class="progress-item"><span>Waist</span><span><input type="text" class="measure-input" data-key="body_waist" placeholder="cm"></span></div>
-            </div>
         </div>
     </div>
 
@@ -1245,105 +1295,129 @@
             if (btn) btn.classList.add('active');
         }
 
-        // ============ WORKOUT DATA ============
-        const workouts = {
+        // ============ WORKOUT DATA (expanded for planner) ============
+        const workoutsFull = {
             pushA: {
                 name: 'Push A — Chest + Shoulders + Triceps',
                 badge: 'push-badge',
+                time: '~80-85 min',
+                sets: '28 sets + 9 abs',
                 exercises: [
-                    { name: 'Pike Push-Ups', sets: '3×8-12', hasWeight: false },
-                    { name: 'Weighted Dips', sets: '3×6-10', hasWeight: true },
-                    { name: 'Incline Press', sets: '3×6-10', hasWeight: true },
-                    { name: 'Cable Flies (High→Low)', sets: '3×12', hasWeight: true },
-                    { name: 'DB Lateral Raises', sets: '3×12', hasWeight: true },
-                    { name: 'Rear Delt Cable Fly', sets: '2×15', hasWeight: true },
-                    { name: 'Rear Delt Machine', sets: '1×15', hasWeight: true },
-                    { name: 'Close-Grip Bench', sets: '3×10-12', hasWeight: true },
-                    { name: 'Tricep Cable Pushdowns', sets: '3×10-12', hasWeight: true },
-                    { name: 'Close-Grip Push-Ups', sets: '2×12', hasWeight: false },
+                    { group: 'Chest', icon: '🤸', name: 'Pike Push-Ups (elevated feet)', sets: '3 × 8-12', rest: '60s', note: 'Calisthenics primer' },
+                    { group: 'Chest', icon: '⬇️', name: 'Weighted Dips', sets: '3 × 6-10', rest: '90s', note: 'Lean forward, add weight' },
+                    { group: 'Chest', icon: '📐', name: 'Incline Press (Heavy)', sets: '3 × 6-10', rest: '90s', note: '30-45° angle' },
+                    { group: 'Chest', icon: '🦋', name: 'Cable Flies — High to Low', sets: '3 × 12', rest: '60s', note: 'Full stretch + squeeze' },
+                    { group: 'Shoulders', icon: '🏋️', name: 'DB Lateral Raises', sets: '3 × 12 + drop', rest: '60s', note: 'Last set drop set' },
+                    { group: 'Shoulders', icon: '🔗', name: 'Rear Delt Cable Fly', sets: '2 × 15', rest: '45s', note: 'Pinky up, cross body' },
+                    { group: 'Shoulders', icon: '🎯', name: 'Rear Delt Machine', sets: '1 × 15', rest: '—', note: 'Burnout finisher' },
+                    { group: 'Triceps', icon: '💪', name: 'Close-Grip Bench', sets: '3 × 10-12', rest: '60s', note: 'Elbows tucked' },
+                    { group: 'Triceps', icon: '🔽', name: 'Tricep Cable Pushdowns', sets: '3 × 10-12', rest: '45s', note: 'Full extension' },
+                    { group: 'Triceps', icon: '🤸', name: 'Close-Grip Push-Ups', sets: '2 × 12', rest: '—', note: 'Finisher to failure' },
+                    { group: 'Abs', icon: '🧗', name: 'Mountain Climbers', sets: '3 × 30s', rest: '30s', note: 'Controlled pace' },
+                    { group: 'Abs', icon: '🦵', name: 'Leg Raises (Straight/Bent)', sets: '3 × 12-15', rest: '30s', note: 'Slow negative' },
+                    { group: 'Abs', icon: '🔽', name: 'Cable Pulldown Crunch', sets: '3 × 12', rest: '30s', note: 'Full contraction' },
                 ]
             },
             pushB: {
                 name: 'Push B — Calisthenics Emphasis',
                 badge: 'push-badge',
+                time: '~80-85 min',
+                sets: '28 sets + 9 abs',
                 exercises: [
-                    { name: 'Handstand Hold / Hindu PU', sets: '3×45s/10', hasWeight: false },
-                    { name: 'Push-Up Handles (Explosive)', sets: '3×12', hasWeight: false },
-                    { name: 'Incline DB Press', sets: '3×6-10', hasWeight: true },
-                    { name: 'Cable Flies (Low→High)', sets: '3×12', hasWeight: true },
-                    { name: 'Cable Lateral Raises', sets: '3×12', hasWeight: true },
-                    { name: 'Rear Delt Cable Fly', sets: '2×15', hasWeight: true },
-                    { name: 'Rear Delt Machine', sets: '1×15', hasWeight: true },
-                    { name: 'Overhead Tricep Extension', sets: '3×10-12', hasWeight: true },
-                    { name: 'Skull Crushers', sets: '3×10-12', hasWeight: true },
-                    { name: 'Diamond Push-Ups', sets: '2×fail', hasWeight: false },
+                    { group: 'Chest', icon: '🤸', name: 'Handstand Hold / Hindu PU', sets: '3 × 45s/10', rest: '60s', note: 'Skill + push primer' },
+                    { group: 'Chest', icon: '💥', name: 'Push-Up Handles (Explosive)', sets: '3 × 12', rest: '60s', note: 'Full ROM, explosive up' },
+                    { group: 'Chest', icon: '📐', name: 'Incline DB Press', sets: '3 × 6-10', rest: '90s', note: 'Go heavy, upper chest' },
+                    { group: 'Chest', icon: '🦋', name: 'Cable Flies — Low to High', sets: '3 × 12', rest: '60s', note: 'Arc from low to high' },
+                    { group: 'Shoulders', icon: '🔗', name: 'Cable Lateral Raises', sets: '3 × 12', rest: '60s', note: 'Constant tension' },
+                    { group: 'Shoulders', icon: '🔗', name: 'Rear Delt Cable Fly', sets: '2 × 15', rest: '45s', note: 'Cross body' },
+                    { group: 'Shoulders', icon: '🎯', name: 'Rear Delt Machine', sets: '1 × 15', rest: '—', note: 'Burnout' },
+                    { group: 'Triceps', icon: '🔽', name: 'Overhead Tricep Extension', sets: '3 × 10-12', rest: '60s', note: 'Cable or DB' },
+                    { group: 'Triceps', icon: '💀', name: 'Skull Crushers', sets: '3 × 10-12', rest: '60s', note: 'EZ-bar, full stretch' },
+                    { group: 'Triceps', icon: '💎', name: 'Diamond Push-Ups', sets: '2 × fail', rest: '—', note: 'Absolute failure' },
+                    { group: 'Abs', icon: '🧗', name: 'Mountain Climbers', sets: '3 × 30s', rest: '30s', note: 'Controlled pace' },
+                    { group: 'Abs', icon: '🦵', name: 'Leg Raises (Straight/Bent)', sets: '3 × 12-15', rest: '30s', note: 'Slow negative' },
+                    { group: 'Abs', icon: '🔽', name: 'Full Extension Crunches', sets: '3 × 12', rest: '30s', note: 'Full contraction' },
                 ]
             },
             pullA: {
                 name: 'Pull A — Vertical Focus',
                 badge: 'pull-badge',
+                time: '~80-85 min',
+                sets: '28 sets + 9 abs',
                 exercises: [
-                    { name: 'Pull-Ups', sets: '3×8', hasWeight: false },
-                    { name: 'Weighted Chin-Ups', sets: '3×6-8', hasWeight: true },
-                    { name: 'Close-Grip Pulldown', sets: '3×10-12', hasWeight: true },
-                    { name: 'Unilateral Cable Pulldown', sets: '2×12', hasWeight: true },
-                    { name: 'Face Pulls (Low→High)', sets: '3×12', hasWeight: true },
-                    { name: 'Y-Raise (Lower Trap)', sets: '3×12', hasWeight: true },
-                    { name: 'Dumbbell Shrugs', sets: '3×12', hasWeight: true },
-                    { name: 'Hammer Curls (21s)', sets: '3×12', hasWeight: true },
-                    { name: 'Machine Bicep Curls', sets: '3×12', hasWeight: true },
-                    { name: 'Bar Curls + Reverse', sets: '2×12+12', hasWeight: true },
+                    { group: 'Back (Vertical)', icon: '🔼', name: 'Pull-Ups', sets: '3 × 8', rest: '90s', note: 'Full dead hang' },
+                    { group: 'Back (Vertical)', icon: '⬆️', name: 'Weighted Chin-Ups', sets: '3 × 6-8', rest: '90s', note: 'Add weight progressively' },
+                    { group: 'Back (Vertical)', icon: '🔽', name: 'Close-Grip Pulldown', sets: '3 × 10-12', rest: '60s', note: 'Squeeze lats' },
+                    { group: 'Back (Vertical)', icon: '🔗', name: 'Unilateral Cable Pulldown', sets: '2 × 12', rest: '60s', note: 'One arm at a time' },
+                    { group: 'Rear Delts + Traps', icon: '🎯', name: 'Face Pulls (Low→High)', sets: '3 × 12', rest: '45s', note: 'External rotation' },
+                    { group: 'Rear Delts + Traps', icon: '🔻', name: 'Y-Raise (Lower Trap)', sets: '3 × 12', rest: '45s', note: 'Incline bench, thumbs up' },
+                    { group: 'Rear Delts + Traps', icon: '🏋️', name: 'Dumbbell Shrugs', sets: '3 × 12', rest: '45s', note: 'Hold top 2s' },
+                    { group: 'Biceps + Forearms', icon: '🔨', name: 'Hammer Curls (21s)', sets: '3 × 21', rest: '60s', note: '7 bottom + 7 top + 7 full' },
+                    { group: 'Biceps + Forearms', icon: '⚙️', name: 'Machine Bicep Curls', sets: '3 × 12', rest: '45s', note: 'Squeeze peak contraction' },
+                    { group: 'Biceps + Forearms', icon: '🔄', name: 'Bar Curls + Reverse', sets: '2 × 12+12', rest: '60s', note: 'Superset: curls then reverse' },
+                    { group: 'Abs', icon: '🧗', name: 'Mountain Climbers', sets: '3 × 30s', rest: '30s', note: 'Controlled pace' },
+                    { group: 'Abs', icon: '🦵', name: 'Leg Raises (Straight/Bent)', sets: '3 × 12-15', rest: '30s', note: 'Slow negative' },
+                    { group: 'Abs', icon: '🔽', name: 'Cable Pulldown Crunch', sets: '3 × 12', rest: '30s', note: 'Full contraction' },
                 ]
             },
             pullB: {
                 name: 'Pull B — Horizontal Focus',
                 badge: 'pull-badge',
+                time: '~80-85 min',
+                sets: '30 sets + 9 abs',
                 exercises: [
-                    { name: 'Inverted Smith Row', sets: '3×12', hasWeight: false },
-                    { name: 'Barbell/Smith Row', sets: '4×10', hasWeight: true },
-                    { name: 'Gorilla Rows', sets: '3×12', hasWeight: true },
-                    { name: 'Close-Grip Seated Row', sets: '3×10', hasWeight: true },
-                    { name: 'Face Pulls (Horizontal)', sets: '3×12', hasWeight: true },
-                    { name: 'DB/Trap Bar Shrugs', sets: '3×12', hasWeight: true },
-                    { name: 'Y+T Raises (Incline)', sets: '3×10+10', hasWeight: true },
-                    { name: 'Incline DB Curls', sets: '3×10-12', hasWeight: true },
-                    { name: 'EZ-Bar Curls', sets: '3×12', hasWeight: true },
-                    { name: 'Reverse Curls', sets: '2×15', hasWeight: true },
+                    { group: 'Back (Horizontal)', icon: '🤸', name: 'Inverted Smith Row', sets: '3 × 12', rest: '60s', note: 'Calisthenics primer' },
+                    { group: 'Back (Horizontal)', icon: '🏋️', name: 'Barbell/Smith Row', sets: '4 × 10', rest: '90s', note: 'Overhand, heavy' },
+                    { group: 'Back (Horizontal)', icon: '🦍', name: 'Gorilla Rows', sets: '3 × 12', rest: '60s', note: 'Alternating, explosive' },
+                    { group: 'Back (Horizontal)', icon: '🔗', name: 'Close-Grip Seated Row', sets: '3 × 10', rest: '60s', note: 'V-handle, squeeze' },
+                    { group: 'Rear Delts + Traps', icon: '🎯', name: 'Face Pulls (Horizontal)', sets: '3 × 12', rest: '45s', note: 'Elbows high' },
+                    { group: 'Rear Delts + Traps', icon: '🏋️', name: 'DB/Trap Bar Shrugs', sets: '3 × 12', rest: '45s', note: 'Hold top 2s' },
+                    { group: 'Rear Delts + Traps', icon: '🔻', name: 'Y+T Raises (Incline)', sets: '3 × 10+10', rest: '45s', note: 'Prone on incline bench' },
+                    { group: 'Biceps + Forearms', icon: '📐', name: 'Incline DB Curls', sets: '3 × 10-12', rest: '60s', note: 'Max stretch' },
+                    { group: 'Biceps + Forearms', icon: '🏋️', name: 'EZ-Bar Curls', sets: '3 × 12', rest: '45s', note: 'Strict form' },
+                    { group: 'Biceps + Forearms', icon: '🔄', name: 'Reverse Curls', sets: '2 × 15', rest: '45s', note: 'Forearm focus' },
+                    { group: 'Abs', icon: '🧗', name: 'Mountain Climbers', sets: '3 × 30s', rest: '30s', note: 'Controlled pace' },
+                    { group: 'Abs', icon: '🦵', name: 'Leg Raises (Straight/Bent)', sets: '3 × 12-15', rest: '30s', note: 'Slow negative' },
+                    { group: 'Abs', icon: '🔽', name: 'Full Extension Crunches', sets: '3 × 12', rest: '30s', note: 'Full contraction' },
                 ]
             },
             legsA: {
                 name: 'Legs A — Quad Dominant',
                 badge: 'legs-badge',
+                time: '~75-80 min',
+                sets: '27 sets',
                 exercises: [
-                    { name: 'Back Squat', sets: '4×8-10', hasWeight: true },
-                    { name: 'Leg Press (Low+Narrow)', sets: '4×12', hasWeight: true },
-                    { name: 'Bulgarian Split Squats', sets: '3×10/leg', hasWeight: true },
-                    { name: 'Leg Extension + Drop', sets: '3×12', hasWeight: true },
-                    { name: 'Romanian Deadlift', sets: '3×10', hasWeight: true },
-                    { name: 'Lying Leg Curl', sets: '3×12', hasWeight: true },
-                    { name: 'Hip Thrust', sets: '3×12', hasWeight: true },
-                    { name: 'Seated Calf Raise', sets: '4×15', hasWeight: true },
+                    { group: 'Quads', icon: '🏋️', name: 'Back Squat', sets: '4 × 8-10', rest: '120s', note: 'Heels elevated if needed' },
+                    { group: 'Quads', icon: '🦵', name: 'Leg Press (Low + Narrow)', sets: '4 × 12', rest: '90s', note: 'Quad emphasis' },
+                    { group: 'Quads', icon: '🇧🇬', name: 'Bulgarian Split Squats', sets: '3 × 10/leg', rest: '60s', note: 'DB or barbell' },
+                    { group: 'Quads', icon: '🔥', name: 'Leg Extension + Drop', sets: '3 × 12', rest: '60s', note: 'Last set drop 30%' },
+                    { group: 'Hamstrings + Glutes', icon: '🔻', name: 'Romanian Deadlift', sets: '3 × 10', rest: '90s', note: 'Stiff-legged, deep stretch' },
+                    { group: 'Hamstrings + Glutes', icon: '🔗', name: 'Lying Leg Curl', sets: '3 × 12', rest: '60s', note: 'Squeeze top' },
+                    { group: 'Hamstrings + Glutes', icon: '🍑', name: 'Hip Thrust', sets: '3 × 12', rest: '60s', note: 'Pause at top' },
+                    { group: 'Calves', icon: '🦶', name: 'Seated Calf Raise', sets: '4 × 15', rest: '30s', note: 'Deep stretch, hold top 1s' },
                 ]
             },
             legsB: {
                 name: 'Legs B — Posterior Chain',
                 badge: 'legs-badge',
+                time: '~75-80 min',
+                sets: '28 sets',
                 exercises: [
-                    { name: 'Deadlift / Trap Bar DL', sets: '4×6-8', hasWeight: true },
-                    { name: 'Lying Leg Curl', sets: '4×10-12', hasWeight: true },
-                    { name: 'Walking Lunges', sets: '3×12/leg', hasWeight: true },
-                    { name: 'Hack Squat', sets: '4×10-12', hasWeight: true },
-                    { name: 'Leg Extension (Slow)', sets: '3×15', hasWeight: true },
-                    { name: 'Cable Pull-Throughs / KB Swings', sets: '3×15', hasWeight: true },
-                    { name: 'Wall Balls', sets: '3×15', hasWeight: true },
-                    { name: 'Donkey Calf Raise', sets: '4×15', hasWeight: true },
+                    { group: 'Posterior Chain', icon: '🏋️', name: 'Deadlift / Trap Bar DL', sets: '4 × 6-8', rest: '150s', note: 'Primary mass builder' },
+                    { group: 'Posterior Chain', icon: '🔗', name: 'Lying Leg Curl', sets: '4 × 10-12', rest: '60s', note: 'Squeeze and hold' },
+                    { group: 'Posterior Chain', icon: '🚶', name: 'Walking Lunges', sets: '3 × 12/leg', rest: '60s', note: 'Long stride for glutes' },
+                    { group: 'Quads', icon: '🔻', name: 'Hack Squat', sets: '4 × 10-12', rest: '90s', note: 'Deep, controlled' },
+                    { group: 'Quads', icon: '🔥', name: 'Leg Extension (Slow Eccentric)', sets: '3 × 15', rest: '60s', note: '3s negative' },
+                    { group: 'Posterior Chain', icon: '🔗', name: 'Cable Pull-Throughs / KB Swings', sets: '3 × 15', rest: '45s', note: 'Hip hinge focus' },
+                    { group: 'Functional', icon: '⚡', name: 'Wall Balls', sets: '3 × 15', rest: '45s', note: 'Full squat + press' },
+                    { group: 'Calves', icon: '🦶', name: 'Donkey Calf Raise', sets: '4 × 15', rest: '30s', note: 'Deep stretch, hold top 1s' },
                 ]
             }
         };
 
-        // Week schedule: which workouts happen each week
+        // Week schedule
         function getWeekWorkouts(weekNum) {
-            const isA = weekNum % 2 === 1; // odd weeks = A
+            const isA = weekNum % 2 === 1;
             return {
                 legs: isA ? 'legsA' : 'legsB',
                 push: isA ? 'pushA' : 'pushB',
@@ -1357,29 +1431,6 @@
             return 'Peak';
         }
 
-        // ============ LOCAL STORAGE ============
-        function saveData(key, value) {
-            try {
-                const data = JSON.parse(localStorage.getItem('workout90') || '{}');
-                data[key] = value;
-                localStorage.setItem('workout90', JSON.stringify(data));
-            } catch(e) {}
-        }
-
-        function loadData(key) {
-            try {
-                const data = JSON.parse(localStorage.getItem('workout90') || '{}');
-                return data[key] || '';
-            } catch(e) { return ''; }
-        }
-
-        function hasWeekData(weekNum) {
-            try {
-                const data = JSON.parse(localStorage.getItem('workout90') || '{}');
-                return Object.keys(data).some(k => k.startsWith(`w${weekNum}_`));
-            } catch(e) { return false; }
-        }
-
         // ============ WEEK BUTTONS ============
         let currentWeek = 1;
 
@@ -1388,9 +1439,8 @@
             let html = '';
             for (let w = 1; w <= 13; w++) {
                 const phase = getPhase(w);
-                const hasData = hasWeekData(w);
                 const variant = w % 2 === 1 ? 'A' : 'B';
-                html += `<button class="week-btn ${hasData ? 'has-data' : ''}" onclick="selectWeek(${w})" id="week-btn-${w}">
+                html += `<button class="week-btn" onclick="selectWeek(${w})" id="week-btn-${w}">
                     Week ${w} (${variant})
                     <span class="week-phase">${phase}</span>
                 </button>`;
@@ -1404,6 +1454,7 @@
             document.getElementById(`week-btn-${weekNum}`).classList.add('active');
             document.getElementById('week-detail').style.display = 'block';
             renderWeekDetail(weekNum);
+            document.getElementById('week-detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function prevWeek() {
@@ -1413,103 +1464,100 @@
             if (currentWeek < 13) selectWeek(currentWeek + 1);
         }
 
-        // ============ RENDER WEEK DETAIL ============
+        // ============ RENDER FULL WEEK PLANNER ============
+        function getWeekDates(weekNum) {
+            const startDate = new Date(2026, 4, 18); // May 18, 2026 (Monday of Week 1)
+            const weekStart = new Date(startDate);
+            weekStart.setDate(startDate.getDate() + (weekNum - 1) * 7);
+            const dates = [];
+            for (let d = 0; d < 5; d++) {
+                const date = new Date(weekStart);
+                date.setDate(weekStart.getDate() + d);
+                dates.push(date);
+            }
+            return dates;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+        }
+
+        function renderWorkoutTable(workout) {
+            let html = '';
+            let currentGroup = '';
+            workout.exercises.forEach(ex => {
+                if (ex.group !== currentGroup) {
+                    currentGroup = ex.group;
+                    html += `<div class="muscle-group-header">${currentGroup}</div>`;
+                }
+                html += `<div class="planner-exercise">
+                    <div class="planner-exercise-icon">${ex.icon}</div>
+                    <div class="planner-exercise-info">
+                        <div class="planner-exercise-name">${ex.name}</div>
+                        <div class="planner-exercise-note">${ex.note}</div>
+                    </div>
+                    <div class="planner-exercise-sets">${ex.sets}</div>
+                    <div class="planner-exercise-rest">${ex.rest}</div>
+                </div>`;
+            });
+            return html;
+        }
+
         function renderWeekDetail(weekNum) {
             const variant = weekNum % 2 === 1 ? 'A' : 'B';
             const phase = getPhase(weekNum);
+            const dates = getWeekDates(weekNum);
             document.getElementById('week-detail-title').textContent = 
                 `Week ${weekNum} (${variant}) — ${phase} Phase`;
 
             const schedule = getWeekWorkouts(weekNum);
             const container = document.getElementById('week-workouts');
-            
-            let html = '';
+
             const days = [
-                { key: 'legs', label: 'Monday', dayKey: schedule.legs },
-                { key: 'push', label: 'Tuesday', dayKey: schedule.push },
-                { key: 'pull', label: 'Thursday', dayKey: schedule.pull }
+                { dayIdx: 0, type: 'gym', workoutKey: schedule.legs, label: 'Monday', color: '#7ddf7d', bgColor: '#1a2a1a' },
+                { dayIdx: 1, type: 'gym', workoutKey: schedule.push, label: 'Tuesday', color: '#df7d7d', bgColor: '#2a1a1a' },
+                { dayIdx: 2, type: 'activity', label: 'Wednesday', color: '#dfdf7d', bgColor: '#2a2a1a' },
+                { dayIdx: 3, type: 'gym', workoutKey: schedule.pull, label: 'Thursday', color: '#7d7ddf', bgColor: '#1a1a2a' },
+                { dayIdx: 4, type: 'activity', label: 'Friday', color: '#dfdf7d', bgColor: '#2a2a1a' },
             ];
 
+            let html = '';
             days.forEach(day => {
-                const workout = workouts[day.dayKey];
-                html += `<div class="workout-log">
-                    <h4>
-                        <span class="day-badge ${workout.badge}">${day.label}</span>
-                        ${workout.name}
-                    </h4>`;
+                const dateStr = formatDate(dates[day.dayIdx]);
                 
-                workout.exercises.forEach((ex, i) => {
-                    const weightKey = `w${weekNum}_${day.dayKey}_${i}_kg`;
-                    const repsKey = `w${weekNum}_${day.dayKey}_${i}_reps`;
-                    const savedWeight = loadData(weightKey);
-                    const savedReps = loadData(repsKey);
-
-                    html += `<div class="log-exercise">
-                        <div class="log-exercise-name">${ex.name} <span style="color:#666; font-size:0.8em;">(${ex.sets})</span></div>`;
-                    
-                    if (ex.hasWeight) {
-                        html += `<input type="text" inputmode="decimal" class="log-input ${savedWeight ? 'filled' : ''}" 
-                            placeholder="kg" value="${savedWeight}" 
-                            onchange="saveData('${weightKey}', this.value); this.classList.toggle('filled', !!this.value); updateCompletion(${weekNum});">`;
-                    } else {
-                        html += `<span style="width:60px;"></span>`;
-                    }
-                    
-                    html += `<input type="text" inputmode="numeric" class="log-input ${savedReps ? 'filled' : ''}" 
-                        placeholder="reps" value="${savedReps}" 
-                        onchange="saveData('${repsKey}', this.value); this.classList.toggle('filled', !!this.value); updateCompletion(${weekNum});">
+                if (day.type === 'gym') {
+                    const workout = workoutsFull[day.workoutKey];
+                    html += `<div class="planner-day" style="border-left: 3px solid ${day.color};">
+                        <div class="planner-day-header" onclick="this.parentElement.classList.toggle('expanded')" style="cursor:pointer;">
+                            <div>
+                                <span class="planner-day-label" style="color:${day.color};">${day.label}</span>
+                                <span class="planner-day-date">${dateStr}</span>
+                            </div>
+                            <div class="planner-day-workout">${workout.name}</div>
+                            <div class="planner-day-meta">${workout.time} · ${workout.sets}</div>
+                            <div class="planner-expand-icon">▼</div>
+                        </div>
+                        <div class="planner-day-body">
+                            ${renderWorkoutTable(workout)}
+                        </div>
                     </div>`;
-                });
-
-                // Completion bar
-                html += `<div class="completion-bar"><div class="completion-bar-fill" id="bar-${day.dayKey}-${weekNum}"></div></div>`;
-                html += `</div>`;
+                } else {
+                    html += `<div class="planner-day" style="border-left: 3px solid ${day.color};">
+                        <div class="planner-day-header">
+                            <div>
+                                <span class="planner-day-label" style="color:${day.color};">${day.label}</span>
+                                <span class="planner-day-date">${dateStr}</span>
+                            </div>
+                            <div class="planner-day-workout">🧘 Activity Day</div>
+                            <div class="planner-day-meta">Choose one: Hot Yoga · Running · Tennis · Football · Calisthenics</div>
+                        </div>
+                    </div>`;
+                }
             });
 
             container.innerHTML = html;
-            updateCompletion(weekNum);
-        }
-
-        function updateCompletion(weekNum) {
-            const schedule = getWeekWorkouts(weekNum);
-            const dayKeys = [schedule.legs, schedule.push, schedule.pull];
-            
-            dayKeys.forEach(dayKey => {
-                const workout = workouts[dayKey];
-                let filled = 0;
-                let total = 0;
-                workout.exercises.forEach((ex, i) => {
-                    const repsKey = `w${weekNum}_${dayKey}_${i}_reps`;
-                    if (loadData(repsKey)) filled++;
-                    total++;
-                });
-                const pct = total > 0 ? (filled / total) * 100 : 0;
-                const bar = document.getElementById(`bar-${dayKey}-${weekNum}`);
-                if (bar) bar.style.width = pct + '%';
-            });
-
-            // Update week button indicator
-            const btn = document.getElementById(`week-btn-${weekNum}`);
-            if (btn) {
-                if (hasWeekData(weekNum)) {
-                    btn.classList.add('has-data');
-                } else {
-                    btn.classList.remove('has-data');
-                }
-            }
-        }
-
-        // ============ BODY MEASUREMENTS ============
-        function initMeasurements() {
-            document.querySelectorAll('.measure-input').forEach(input => {
-                const key = input.dataset.key;
-                const saved = loadData(key);
-                if (saved) { input.value = saved; input.classList.add('filled'); }
-                input.addEventListener('change', function() {
-                    saveData(key, this.value);
-                    this.classList.toggle('filled', !!this.value);
-                });
-            });
+            // Auto-expand all gym days
+            container.querySelectorAll('.planner-day').forEach(d => d.classList.add('expanded'));
         }
 
         // ============ CALENDAR ============
@@ -1571,7 +1619,6 @@
         // ============ INIT ============
         generateCalendar();
         generateWeekButtons();
-        initMeasurements();
     </script>
 </body>
 </html>
